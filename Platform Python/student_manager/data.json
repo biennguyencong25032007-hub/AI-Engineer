@@ -1,0 +1,40 @@
+{
+  "students": [
+    {
+      "id": "SV001",
+      "name": "Nguyễn Văn An",
+      "age": 20,
+      "email": "nguyenvanan@example.com",
+      "major": "Công nghệ thông tin",
+      "gpa": 3.8,
+      "courses": ["Python", "Machine Learning", "Deep Learning"]
+    },
+    {
+      "id": "SV002",
+      "name": "Trần Thị Bình",
+      "age": 21,
+      "email": "tranthibibinh@example.com",
+      "major": "Khoa học dữ liệu",
+      "gpa": 3.5,
+      "courses": ["Python", "Data Analysis", "NLP"]
+    },
+    {
+      "id": "SV003",
+      "name": "Lê Minh Cường",
+      "age": 22,
+      "email": "leminhcuong@example.com",
+      "major": "Trí tuệ nhân tạo",
+      "gpa": 3.9,
+      "courses": ["Python", "Computer Vision", "Reinforcement Learning"]
+    }
+  ],
+  "courses": [
+    {"code": "PY101", "name": "Python Programming", "credits": 3},
+    {"code": "ML201", "name": "Machine Learning", "credits": 4},
+    {"code": "DL301", "name": "Deep Learning", "credits": 4},
+    {"code": "NLP401", "name": "Natural Language Processing", "credits": 3},
+    {"code": "CV501", "name": "Computer Vision", "credits": 3},
+    {"code": "DA101", "name": "Data Analysis", "credits": 3},
+    {"code": "RL601", "name": "Reinforcement Learning", "credits": 4}
+  ]
+}
