@@ -4,6 +4,7 @@ import torch
 from torch.utils.data import Dataset, DataLoader
 from sklearn.model_selection import train_test_split
 from typing import Tuple
+from pathlib import Path
 
 from src.config import Config
 from src.preprocessing import Preprocessor
@@ -26,13 +27,42 @@ class TabularDataset(Dataset):
 
 
 # ──────────────────────────────────────────────
+def resolve_path(data_path: str) -> Path:
+    """
+    Resolve data_path thành đường dẫn tuyệt đối.
+    Tự động tìm từ thư mục chứa file này (src/) lên project root.
+    """
+    p = Path(data_path)
+    if p.is_absolute() and p.exists():
+        return p
+
+    # Thử từ thư mục hiện tại
+    if p.exists():
+        return p.resolve()
+
+    # Thử từ project root (thư mục cha của src/)
+    project_root = Path(__file__).parent.parent
+    candidate = project_root / data_path
+    if candidate.exists():
+        return candidate
+
+    raise FileNotFoundError(
+        f"Không tìm thấy file dữ liệu: '{data_path}'\n"
+        f"Đã thử:\n"
+        f"  - {Path(data_path).resolve()}\n"
+        f"  - {candidate}"
+    )
+
+
+# ──────────────────────────────────────────────
 def load_data(cfg: Config) -> Tuple[DataLoader, DataLoader, DataLoader, Preprocessor]:
     """
     Reads CSV, preprocesses, splits into train/val/test,
     returns DataLoaders and the fitted Preprocessor.
     """
-    logger.info(f"Loading data from: {cfg.data.data_path}")
-    df = pd.read_csv(cfg.data.data_path)
+    data_path = resolve_path(cfg.data.data_path)
+    logger.info(f"Loading data from: {data_path}")
+    df = pd.read_csv(data_path)
 
     # Drop unwanted columns
     df.drop(columns=cfg.data.drop_columns, errors="ignore", inplace=True)

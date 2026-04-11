@@ -4,7 +4,7 @@ from typing import List, Optional
 
 @dataclass
 class DataConfig:
-    data_path: str = "data/dataset.csv"
+    data_path: str = "data/sample_data.csv"
     target_column: str = "target"
     test_size: float = 0.2
     val_size: float = 0.1
