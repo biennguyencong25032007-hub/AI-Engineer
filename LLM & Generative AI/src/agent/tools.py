@@ -4,9 +4,17 @@ Define và execute tools for agents.
 """
 from __future__ import annotations
 
+import sys
+from pathlib import Path
 from abc import ABC, abstractmethod
 from dataclasses import dataclass, field
 from typing import Any, Callable, Type
+
+# Add project root to path for direct script execution
+if __name__ == "__main__" or ("src" not in sys.modules and Path(__file__).parent.parent.parent.exists()):
+    _project_root = Path(__file__).parent.parent.parent
+    if str(_project_root) not in sys.path:
+        sys.path.insert(0, str(_project_root))
 
 from src.logger import get_logger
 

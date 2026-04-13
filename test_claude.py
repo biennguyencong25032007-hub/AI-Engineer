@@ -1,6 +1,6 @@
 import requests
 
-API_KEY = "dán_api_key_của_bạn_vào_đây"
+API_KEY = "sk-proj-1008b56f5cd34fc89fb7a58741dcf785"
 
 url = "https://api.taphoaapi.com/v1/chat/completions"
 
