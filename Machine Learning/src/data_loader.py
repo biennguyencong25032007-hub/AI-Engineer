@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 import numpy as np
 import pandas as pd
 import torch
@@ -11,6 +13,15 @@ from src.preprocessing import Preprocessor
 from src.logger import get_logger
 
 logger = get_logger("data_loader")
+
+
+def _get_device() -> torch.device:
+    """Auto-detect best available device."""
+    if torch.cuda.is_available():
+        return torch.device("cuda")
+    if torch.backends.mps.is_available():
+        return torch.device("mps")
+    return torch.device("cpu")
 
 
 # ──────────────────────────────────────────────
@@ -113,13 +124,22 @@ def load_data(cfg: Config) -> Tuple[DataLoader, DataLoader, DataLoader, Preproce
         cfg.training.pos_weight = (1 - pos_ratio) / pos_ratio
         logger.warning(f"Imbalanced dataset detected. Setting pos_weight={cfg.training.pos_weight:.2f}")
 
-    def make_loader(X, y, shuffle):
+    # ──────────────────────────────────────────────────────────────
+    def _make_loader(X: np.ndarray, y: np.ndarray, shuffle: bool) -> DataLoader:
+        """Create DataLoader với pin_memory tối ưu cho GPU."""
         ds = TabularDataset(X, y)
-        return DataLoader(ds, batch_size=cfg.training.batch_size, shuffle=shuffle, num_workers=0)
+        pin_memory = torch.cuda.is_available()
+        return DataLoader(
+            ds,
+            batch_size=cfg.training.batch_size,
+            shuffle=shuffle,
+            num_workers=0,  # Stable cho macOS/Windows
+            pin_memory=pin_memory,
+        )
 
     return (
-        make_loader(X_train, y_train, shuffle=True),
-        make_loader(X_val,   y_val,   shuffle=False),
-        make_loader(X_test,  y_test,  shuffle=False),
+        _make_loader(X_train, y_train, shuffle=True),
+        _make_loader(X_val,   y_val,   shuffle=False),
+        _make_loader(X_test,  y_test,  shuffle=False),
         preprocessor,
     )
