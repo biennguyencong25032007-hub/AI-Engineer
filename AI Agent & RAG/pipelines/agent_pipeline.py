@@ -1,8 +1,12 @@
 """Agent Pipeline - Orchestrates agent execution"""
 
 from typing import Dict, Any, List, Optional
-from agents import BaseAgent, ToolCallingAgent, ReActAgent
-from memory import ShortTermMemory, LongTermMemory, EpisodicMemory
+from agents.base_agent import BaseAgent
+from agents.tool_calling_agent import ToolCallingAgent
+from agents.react_agent import ReActAgent
+from memory.short_term import ShortTermMemory
+from memory.long_term import LongTermMemory
+from memory.episodic import EpisodicMemory
 from config.settings import Settings
 from config.prompts import SYSTEM_PROMPT, AGENT_EXECUTION_PROMPT
 
@@ -81,7 +85,10 @@ class AgentPipeline:
         """Create agent based on type"""
         if self.agent_type == "tool_calling":
             # Initialize tools
-            from tools import CalculatorTool, SearchTool, FileTool, SQLTool
+            from tools.calculator_tool import CalculatorTool
+            from tools.search_tool import SearchTool
+            from tools.file_tool import FileTool
+            from tools.sql_tool import SQLTool
 
             tools = {
                 'calculator': CalculatorTool(),
